@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 
 import errorDefinitions
-import keyGenerator
+import keyService
 
 
 class MainWindow(QMainWindow):
@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(50, 50, 1000, 600)
         self.setStyleSheet("background-color: white;")
 
-        self.welcome_label_text = 'Generate private key'
+        self.welcome_label_text = 'Key generator'
         self.welcome_label = QLabel(self.welcome_label_text)
         self.welcome_label.setStyleSheet("color: black; font-size: 44pt;")
         self.welcome_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -50,7 +50,6 @@ class MainWindow(QMainWindow):
         self.pin_label.setStyleSheet("color: black; font-size: 34pt;")
         self.pin_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        # Create a sub-layout for the enter PIN page elements
         sub_layout = QVBoxLayout()
         sub_layout.addWidget(self.pin_label, alignment=QtCore.Qt.AlignCenter)
 
@@ -95,9 +94,9 @@ class MainWindow(QMainWindow):
 
     def submit_button_clicked(self):
         pin = self.input_field.text()
-        generator = keyGenerator.KeyGenerator(pin)
+        generator = keyService.KeyService(pin)
         try:
-            generator.write_keys_to_file()
+            generator.getKeys()
             # encrypted private key loaded to the NO NAME usb stick, public key is stored on Desktop
             self.status_popup('Keys generation finished successfully.')
         except errorDefinitions.NoValidUSBDevice:
